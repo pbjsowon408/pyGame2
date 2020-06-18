@@ -42,7 +42,7 @@ character_y_pos = screen_height - character_height - stage_height
 character_to_x = 0
 
 # character speed
-character_speed = 5
+character_speed = 8
 
 # Create Weapon
 weapon = pygame.image.load(os.path.join(image_path, "weapon.png"))
@@ -53,7 +53,7 @@ weapon_width = weapon_size[0]
 weapons = []
 
 # weapon speed
-weapon_speed = 10
+weapon_speed = 15
 
 # Create ball (Create each 4 balls)
 ball_images = [
@@ -78,9 +78,14 @@ balls.append({
     "init_spd_y": ball_speed_y[0]  # initial speed y
 })
 
+# save variation for weapon and ball that will disappear
+weapon_to_remove = -1
+ball_to_remove = -1
+
+
 running = True
 while running:
-    dt = clock.tick(90)
+    dt = clock.tick(60)
     # 2. Deal with Event (Keyboard, Mouse, etc.)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -157,11 +162,38 @@ while running:
         ball_rect.left = ball_pos_x
         ball_rect.top = ball_pos_y
 
+        # collision of ball and char check
         if character_rect.colliderect(ball_rect):
             running = False
             break
 
-        # 5. Draw on a Screen
+        # collision of Ball and weapons
+        for weapon_idx, weapon_val in enumerate(weapons):
+            weapon_pos_x = weapon_val[0]
+            weapon_pos_y = weapon_val[1]
+
+            # Weapon rect info update
+            weapon_rect = weapon.get_rect()
+            weapon_rect.left = weapon_pos_x
+            weapon_rect.top = weapon_pos_y
+
+            # collision check
+            if weapon_rect.colliderect(ball_rect):
+                weapon_to_remove = weapon_idx  # value set for remove weapon
+                ball_to_remove = ball_idx  # value set for remove ball
+                break
+
+# collide ball or weapon remove
+    if ball_to_remove > -1:
+        del balls[ball_to_remove]
+        ball_to_remove = -1
+
+    if weapon_to_remove > -1:
+        del weapons[weapon_to_remove]
+        weapon_to_remove = -1
+
+
+# 5. Draw on a Screen
     screen.blit(background, (0, 0))
 
     for weapon_x_pos, weapon_y_pos in weapons:
