@@ -80,7 +80,7 @@ balls.append({
 
 running = True
 while running:
-    dt = clock.tick(60)
+    dt = clock.tick(90)
     # 2. Deal with Event (Keyboard, Mouse, etc.)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -112,7 +112,7 @@ while running:
 # change weapon location
     weapons = [[w[0], w[1] - weapon_speed]
                for w in weapons]  # Locate weapon up
-# 4. Deal with Collision
+
 # disable Weapon over the ceil
     weapons = [[w[0], w[1]] for w in weapons if w[1] > 0]
 
@@ -138,6 +138,29 @@ while running:
 
         ball_val["pos_x"] += ball_val["to_x"]
         ball_val["pos_y"] += ball_val["to_y"]
+
+
+# 4. Deal with Collision
+
+# character rect info update
+    character_rect = character.get_rect()
+    character_rect.left = character_x_pos
+    character_rect.top = character_y_pos
+
+    for ball_idx, ball_val in enumerate(balls):
+        ball_pos_x = ball_val["pos_x"]
+        ball_pos_y = ball_val["pos_y"]
+        ball_img_idx = ball_val["img_idx"]
+
+        # Ball rect info update
+        ball_rect = ball_images[ball_img_idx].get_rect()
+        ball_rect.left = ball_pos_x
+        ball_rect.top = ball_pos_y
+
+        if character_rect.colliderect(ball_rect):
+            running = False
+            break
+
         # 5. Draw on a Screen
     screen.blit(background, (0, 0))
 
