@@ -55,6 +55,29 @@ weapons = []
 # weapon speed
 weapon_speed = 10
 
+# Create ball (Create each 4 balls)
+ball_image = [
+    pygame.image.load(os.path.join(image_path, "ballon1.png")),
+    pygame.image.load(os.path.join(image_path, "ballon2.png")),
+    pygame.image.load(os.path.join(image_path, "ballon3.png")),
+    pygame.image.load(os.path.join(image_path, "ballon4.png"))
+]
+
+# initial speed due to the ball size
+ball_speed_y = [-18, -15, -12, -9]  # Value of index 0,1,2,3,
+
+# Ball info
+balls = []
+# add initial ball
+balls.append({
+    "pos_x": 50,
+    "pos_y": 50,
+    "img_idx": 0,  # img index of ball
+    "to_x": 3,  # moving to x side, if -3 left, if 3 right
+    "to_y": -6,  # moving to y side
+    "init_spe_y": ball_speed_y[0]  # initial speed y
+})
+
 running = True
 while running:
     dt = clock.tick(60)
