@@ -219,6 +219,10 @@ while running:
                         "init_spd_y": ball_speed_y[ball_img_idx + 1]})  # initial speed y
 
                 break
+        else:   # Continue game
+            continue  # continue if the condition of inner for state is incorrect. run outer for state
+        break  # if inner for state break, go to this break. escape both for state
+# collide ball or weapon remove
 
 # collide ball or weapon remove
     if ball_to_remove > -1:
